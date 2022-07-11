@@ -10,14 +10,26 @@ router.get('/', (req, res) => {
       res.render('index.ejs', {
         allCryptos: cryptos,
         baseUrl: req.baseUrl,
-        tabTitle: 'Cryptos',
+        tabTitle: 'Lander',
         currentUser: 'Current User'
       })
   })
-    .catch((err) => {
-      console.log(err)
-      res.redirect('/login')
+})
+router.get('/dashboard', (req, res) => {
+  Crypto.find()
+  .exec()
+  .then((cryptos) => {
+    res.render('dashboard.ejs', {
+      allCryptos: cryptos,
+      baseUrl: req.baseUrl,
+      tabTitle: 'Dashboard',
+      currentUser: 'Current User'
     })
+  })
+  .catch((err) => {
+    console.log(err)
+    res.redirect('/login')
+  })
 })
 
 module.exports = router

@@ -2,9 +2,9 @@
 const mongoose = require("mongoose")
 
 const cryptosSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  abbreviation: { type: Number, required: true },
-  amount: { type: String, required: true },
+  coin: { type: String, required: true },
+  abbreviation: { type: String, required: true },
+  amount: { type: Number, required: true },
   }, 
   {timestamps: true}
 )
