@@ -11,9 +11,8 @@ const mongoDBSession = require('connect-mongodb-session')
 
 
 
-// const sessionsController = require('./controllers/sessions')
+const sessionsController = require('./controllers/sessions')
 const cryptosController = require('./controllers/crypto')
-// const membersController = require('./controllers/members')
 
 
 const app = express()
@@ -47,8 +46,7 @@ app.use(methodOverride("_method"));
 
 // this last (define your middleware last)
 app.use('/', cryptosController)
-// s
-
+app.use('/', sessionsController)
 
 //              LISTENER
 
@@ -57,5 +55,5 @@ mongoose.connect(dbURL, () => {
 })
 
 app.listen(PORT, () => {
-  console.log(`Biscoff Bakery app listening on port: ${PORT}`)
+  console.log(`Crypto Tracker app listening on port: ${PORT}`)
 })

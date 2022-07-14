@@ -1,0 +1,19 @@
+<%- include ('./partials/header.ejs') %>
+
+<form action="/<%= coin.id %>?_method=PUT" method="POST">
+  <div class="form-group">
+    <label for="coin">Coin Name</label>
+    <input type="text" class="form-control" name="coin" id="coin" value="<%= coin.coin %>"/>
+  </div>
+  <div class="form-group">
+    <label for="abbreviation">Abbreviation</label>
+    <input type="text" class="form-control" name="abbreviation" id="abbreviation" value="<%= coin.abbreviation %>"/>
+  </div>
+  <div class="form-group">
+    <label for="amount">Amount</label>
+    <input type="number" class="form-control" name="amount" id="amount" value="<%= coin.amount %>"/>
+  </div>  
+  <input type="submit" class="edit btn btn-primary mb-2" value="Edit Coin" />
+</form>
+
+<%- include ('./partials/footer.ejs') %>

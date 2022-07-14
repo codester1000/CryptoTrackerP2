@@ -1,7 +1,7 @@
 <%- include ('./partials/header.ejs') %>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+  <!-- <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Dashboard</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
@@ -9,24 +9,31 @@
         This week
       </button>
     </div>
-  <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" width="900" height="380" style="display: block; width: 544px; height: 229px;"></canvas>
-  </div>
-  <h2><%= currentUser %>'s Portfolio</h2>
+  </div> -->
+
+  <!-- <canvas class="my-4 w-100 chartjs-render-monitor id="myChart" width="900" height="380"></canvas> -->
+  <h2>Your Portfolio</h2>
+  <h4>$</h4>
+
+
+  <h2>Your Portfolio</h2>
   <div class="table-responsive">
-    <table class="table table-sm">
+    <table class="table table-striped table-sm">
       <thead>
         <tr>
-          <th scope="col">Coin</th>
+          <th scope="col-8">Coin</th>
           <th scope="col">Tokens</th>
           <th scope="col">Price (AUD)</th>
+          <th scope="col"><a class="btn btn-outline-secondary btn-sm" href="/add" role="button">+</a>
         </tr>
       </thead>
       <tbody>
         <% for (let coin of allCryptos) { %>
         <tr>
-          <td><%= coin.name %> (<%= coin.abbreviation %>)</td>
+          <td><%= coin.coin %> (<%= coin.abbreviation %>)</td>
           <td><%= coin.amount %></td>
           <td>1000</td>
+          <th scope="col"><a class="btn btn-outline-secondary btn-sm add" href="edit/<%= coin.id %>" role="button">Edit</a>
         </tr>
         <% } %>
       </tbody>

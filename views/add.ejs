@@ -1,0 +1,19 @@
+<%- include ('./partials/header.ejs') %>
+
+<form action="/dashboard" method="post">
+  <div class="form-group">
+    <label for="coin">Coin Name</label>
+    <input type="text" class="form-control" name="coin" id="coin"/>
+  </div>
+  <div class="form-group">
+    <label for="abbreviation">Abbreviation</label>
+    <input type="text" class="form-control" name="abbreviation" id="abbreviation" placeholder="ABV"/>
+  </div>
+  <div class="form-group">
+    <label for="amount">Amount</label>
+    <input type="number" class="form-control" min="0.00" max="100.00" name="amount" id="amount" placeholder="0"/>
+  </div>  
+  <input type="submit" class="btn btn-primary mb-2" value="Add Coin" />
+</form>
+
+<%- include ('./partials/footer.ejs') %>
