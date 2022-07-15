@@ -3,16 +3,19 @@ const router = express.Router()
 
 const Crypto = require('../models/crypto')
 const User = require('../models/users')
+let pricesArray = null;
+let sum = 0;
 
 
-// const fetchCrypto = () => {
-//   // name = name.toLowerCase()
-//   const api = `https://api.coincap.io/v2/assets/bitcoin`
-//   const results = fetch(api)
-//     .then((crypto) => {
-//       console.log(crypto)
-//     })
-// }
+const sumUp = (pricesArray, allCryptos) => {
+  sum = 0;
+  for (let i=0; i < pricesArray.length; i++) {
+    let num = pricesArray[i]
+    num = num*allCryptos[i].amount
+    sum = num + sum
+  }
+  return sum
+}
 
 // const findAndDelete = () => {
 //   for (let i = 0; i < data.length; i++) {
@@ -36,21 +39,43 @@ router.get('/', (req, res) => {
 // Home Dashboard
 router.get('/dashboard', (req, res) => {
   Crypto.find()
-  .exec()
-  .then((cryptos) => {
-    // fetchCrypto()
-    res.render('dashboard.ejs', {
-      allCryptos: cryptos,
-      baseUrl: req.baseUrl,
-      tabTitle: 'Dashboard',
-      currentUser: req.session.currentUser,
-      defaultImage: "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
-    })
-  })
-  .catch((err) => {
+    .exec()
+    .then((coins) => {
+      //this fetches the value of all the coins in real time
+      pricesArray = []
+      let thing = ''
+      const api = `https://api.coincap.io/v2/assets`
+      const results = fetch(api)
+        .then((res) => res.json())
+        .then((cryptos) => {
+          for(let i=0; i < coins.length; i++) {
+            for (let x=0; x < cryptos.data.length; x++) {
+              if (cryptos.data[x].name == coins[i].coin) {
+                console.log(coins[i].coin)
+                pricesArray.push(parseFloat(cryptos.data[x].priceUsd).toFixed(2))
+              }
+            } 
+          }
+          sum = sumUp(pricesArray, coins)
+        })
+        .then(() => {
+          res.render('dashboard.ejs', {
+            prices: pricesArray,
+            sum: sum,
+            allCryptos: coins,
+            baseUrl: req.baseUrl,
+            tabTitle: 'Dashboard',
+            currentUser: req.session.currentUser,
+            // pricesArray: pricesArray,
+            defaultImage: "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
+            })
+        })
+    }
+    )
+    .catch((err) => {
     console.log(err)
     res.redirect('/dashboard')
-  })
+    })
 })
 // Create coin path
 router.get('/add', (req, res) => {
@@ -63,29 +88,27 @@ router.get('/add', (req, res) => {
       tabTitle: 'Create',
       currentUser: req.session.currentUser,
       defaultImage: "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
-
     })
+    
   })
   .catch((err) => {
     console.log(err)
     res.redirect('/dashboard')
   })
 })
-router.post('/dashboard', (req, res) => {
+router.post('/:id', (req, res) => {
   Crypto
     .create(req.body)
     .then((newCrypto) => {
-      // console.log('New coin created:', newCrypto)
-      console.log(req.session.currentUser.name)
+      console.log('New coin created:', newCrypto)
+      // console.log(req.session.currentUser._id)
+      res.redirect('/dashboard')
       return User.findByIdAndUpdate(
-        req.session.currentUser.id,
-        { $push: { coins: newCrypto }}
+        req.session.currentUser._id,
+        { $push: { coins: newCrypto._id }},
+        { new: true, useFindAndModify: false }
       )
       })
-    .then(() => {
-      console.log(req.session.currentUser)
-      res.redirect('/dashboard')
-    })
     // .then(close)
     .catch((err) => console.log('Error: ', err))
 })
@@ -110,12 +133,18 @@ router.put('/:id', (req, res) => {
     .exec()
     .then((coin) => {
       console.log('Deleted: ', coin)
-      res.redirect('/dashboard')
-      // return User.findByIdAndUpdate(
-      //   req.session.currentUser.id,
-      //   {}
-      // )
+      User.findById(req.session.currentUser._id)
+        .exec()
+        .then((user) => {
+          console.log(user)
+          for(let i=0; i<user.coins.length; i++) {
+            if(coin._id == user.coins[i]) {
+              user.coins.slice(i, i+1)
+            }
+          }
+        })
     })
+    .then(res.redirect('/dashboard'))
 
   } else {
   Crypto.findByIdAndUpdate(

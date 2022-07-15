@@ -1,15 +1,14 @@
 
 const mongoose = require("mongoose")
-const Mschema = mongoose.Schema
 
-const usersSchema = new Mschema({
+const usersSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   image: String,
   name: String,
   coins: [{
-    type: Mschema.Types.ObjectId,
-    ref: 'Crypto'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Crypto"
   }]
 })
 

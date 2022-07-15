@@ -13,7 +13,7 @@
 
   <!-- <canvas class="my-4 w-100 chartjs-render-monitor id="myChart" width="900" height="380"></canvas> -->
   <h2>Your Portfolio</h2>
-  <h4>$</h4>
+  <h4>$<%=sum %></h4>
 
 
   <h2>Your Portfolio</h2>
@@ -23,17 +23,17 @@
         <tr>
           <th scope="col-8">Coin</th>
           <th scope="col">Tokens</th>
-          <th scope="col">Price (AUD)</th>
+          <th scope="col">Value (USD)</th>
           <th scope="col"><a class="btn btn-outline-secondary btn-sm" href="/add" role="button">+</a>
         </tr>
       </thead>
       <tbody>
-        <% for (let coin of allCryptos) { %>
+        <% for (let i=0; i < allCryptos.length; i++) { %>
         <tr>
-          <td><%= coin.coin %> (<%= coin.abbreviation %>)</td>
-          <td><%= coin.amount %></td>
-          <td>1000</td>
-          <th scope="col"><a class="btn btn-outline-secondary btn-sm add" href="edit/<%= coin.id %>" role="button">Edit</a>
+          <td><%= allCryptos[i].coin %> (<%= allCryptos[i].abbreviation %>)</td>
+          <td><%= allCryptos[i].amount %></td>
+          <td><%= (prices[i]*allCryptos[i].amount) %></td>
+          <th scope="col"><a class="btn btn-outline-secondary btn-sm add" href="edit/<%= allCryptos[i].id %>" role="button">Edit</a>
         </tr>
         <% } %>
       </tbody>
